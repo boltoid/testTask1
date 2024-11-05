@@ -1,0 +1,18 @@
+- name: create testuser
+  ansible.builtin.user:
+    name: testuser
+    uid: 1001
+    group: testuser
+    create_home: yes
+
+- name: add public ssh key to testuser
+  ansible.builtin.copy:
+    src: ~/.ssh/testuser_id_rsa.pub
+    dest: /home/testuser/.ssh/authorized_keys
+    owner: testuser
+    mode: '0600'
+
+- name: add line in sudoers
+  ansible.builtin.user: echo -e "testuser ALL=(ALL) NOPASSWD:ALL\n" | tee -a /etc/sudoers 
+
+
